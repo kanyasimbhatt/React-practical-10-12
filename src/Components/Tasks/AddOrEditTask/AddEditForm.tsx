@@ -4,11 +4,10 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useEffect } from "react";
-import { useTask } from "../TaskProvider";
+import { useGeneral } from "../GeneralProvider";
 import "./AddEditForm.css";
 import { Task } from "../../Types/Tasks/types";
 import { TodoStatus } from "../../Types/Tasks/types";
-import { useDarkMode } from "../Navbar/DarkModeProvider";
 
 const schema = z.object({
   id: z.string(),
@@ -21,11 +20,12 @@ type TaskFormFields = z.infer<typeof schema>;
 
 export const AddEditForm: React.FC = () => {
   const { taskId } = useParams();
-  const { darkMode } = useDarkMode();
   const navigate = useNavigate();
-  const { tasks, setTasks } = useTask();
-  const taskData = tasks.find((task: Task) => task.id === taskId);
-  const taskIndex = tasks.findIndex((task: Task) => task.id === taskId);
+  const { generalData, dispatch } = useGeneral();
+  const taskData = generalData.tasks.find((task: Task) => task.id === taskId);
+  const taskIndex = generalData.tasks.findIndex(
+    (task: Task) => task.id === taskId,
+  );
   const defaultValue = {
     id: "",
     title: "",
@@ -45,7 +45,7 @@ export const AddEditForm: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<TaskFormFields> = (data) => {
-    let allTasks = [...tasks];
+    let allTasks = [...generalData.tasks];
     if (taskData) {
       allTasks[taskIndex] = { ...data };
     } else {
@@ -53,7 +53,7 @@ export const AddEditForm: React.FC = () => {
       allTasks = [...allTasks, { ...data, id }];
     }
     localStorage.setItem("tasks-array", JSON.stringify(allTasks));
-    setTasks(allTasks);
+    dispatch({ type: "MODIFY_TASKS", payload: allTasks });
     navigate("/");
   };
 
@@ -63,7 +63,7 @@ export const AddEditForm: React.FC = () => {
 
   return (
     <form
-      className={darkMode ? "add-edit-form" : "add-edit-form-light"}
+      className={generalData.darkMode ? "add-edit-form" : "add-edit-form-light"}
       onSubmit={handleSubmit(onSubmit)}
     >
       <h2 className="form-title">{!taskData ? `Add Task` : `Edit Task`}</h2>
@@ -74,7 +74,9 @@ export const AddEditForm: React.FC = () => {
         <input
           {...register("title")}
           type="text"
-          className={darkMode ? "title input-tag" : "title input-light"}
+          className={
+            generalData.darkMode ? "title input-tag" : "title input-light"
+          }
           placeholder="Enter title"
         />
         {errors.title && (
@@ -88,7 +90,9 @@ export const AddEditForm: React.FC = () => {
         <input
           {...register("description")}
           type="text"
-          className={darkMode ? "title input-tag" : "title input-light"}
+          className={
+            generalData.darkMode ? "title input-tag" : "title input-light"
+          }
           placeholder="Enter Description"
         />
         {errors.description && (
@@ -101,7 +105,9 @@ export const AddEditForm: React.FC = () => {
         <select
           {...register("status")}
           className={
-            darkMode ? "status-select input-tag" : "status-select input-light"
+            generalData.darkMode
+              ? "status-select input-tag"
+              : "status-select input-light"
           }
         >
           <option value={"Todo"}>Todo</option>

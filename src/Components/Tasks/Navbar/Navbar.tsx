@@ -3,7 +3,7 @@ import navbarLogo from "../../../assets/images-removebg-preview.png";
 import SunLogo from "../../../assets/sun.svg";
 import MoonLogo from "../../../assets/moon.svg";
 import "./Navbar.css";
-import { useDarkMode } from "./DarkModeProvider";
+import { useGeneral } from "../GeneralProvider";
 
 type ButtonTextType = {
   buttonName: string;
@@ -11,7 +11,7 @@ type ButtonTextType = {
 
 export const Navbar: React.FC<ButtonTextType> = ({ buttonName }) => {
   const navigate = useNavigate();
-  const { darkMode, setDarkMode } = useDarkMode();
+  const { generalData, dispatch } = useGeneral();
   function handleNavbarButtonClick() {
     if (buttonName === "Add Task") {
       navigate(`/add-task`);
@@ -21,11 +21,11 @@ export const Navbar: React.FC<ButtonTextType> = ({ buttonName }) => {
   }
 
   function handleClickOnMode() {
-    setDarkMode((darkMode: boolean) => !darkMode);
+    dispatch({ type: "MODIFY_MODE", payload: !generalData.darkMode });
   }
 
   return (
-    <nav className={darkMode ? "navbar-div" : "navbar-div-light"}>
+    <nav className={generalData.darkMode ? "navbar-div" : "navbar-div-light"}>
       <div className="navbar-logo-title">
         <img src={navbarLogo} alt="navbar logo" className="navbar-logo" />
         <h2>Manager</h2>
@@ -34,7 +34,7 @@ export const Navbar: React.FC<ButtonTextType> = ({ buttonName }) => {
         <button onClick={handleNavbarButtonClick}>{buttonName}</button>
         <button className="dark-light-button" onClick={handleClickOnMode}>
           <img
-            src={!darkMode ? SunLogo : MoonLogo}
+            src={!generalData.darkMode ? SunLogo : MoonLogo}
             className="navbar-logo-dl"
           />
         </button>

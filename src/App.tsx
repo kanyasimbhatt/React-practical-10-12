@@ -2,13 +2,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ViewAllTaskWrapper } from "./Components/Tasks/ViewAllTasks/ViewAllTasks";
 import { AddEditTaskWrapper } from "./Components/Tasks/AddOrEditTask/AddEditTask";
 import { NotFound } from "./Components/Tasks/NotFound/NotFound";
-import { useDarkMode } from "./Components/Tasks/Navbar/DarkModeProvider";
+import { useGeneral } from "./Components/Tasks/GeneralProvider";
 import "./App.css";
 
 function App() {
-  const { darkMode } = useDarkMode();
+  const { generalData } = useGeneral();
   return (
-    <div className={darkMode ? "" : "light-styles"}>
+    <div className={generalData.darkMode ? "" : "light-styles"}>
       <Router>
         <Routes>
           <Route path="/" element={<ViewAllTaskWrapper />}></Route>

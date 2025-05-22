@@ -1,13 +1,8 @@
 import { Navbar } from "../Navbar/Navbar";
 import { ShowTasks } from "../ShowTasks/ShowTasks";
-import { TaskProvider } from "../TaskProvider";
 
 export const ViewAllTaskWrapper: React.FC = () => {
-  return (
-    <TaskProvider>
-      <ViewAllTask />
-    </TaskProvider>
-  );
+  return <ViewAllTask />;
 };
 
 const ViewAllTask: React.FC = () => {

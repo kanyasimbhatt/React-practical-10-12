@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import "./showTasks.css";
 import { useForm } from "react-hook-form";
 import { useTask } from "../TaskProvider";
+import { useDarkMode } from "../Navbar/DarkModeProvider";
 import { FilterTask } from "../FilterTasks/FilterTask";
 import { Task, FilterElement, TodoStatus } from "../../Types/Tasks/types";
 
 export const ShowTasks: React.FC = () => {
   const statusOptions = ["Done", "In Progress", "Todo"];
   const { tasks, setTasks } = useTask();
+  const { darkMode } = useDarkMode();
   const { register, watch } = useForm<FilterElement>({
     defaultValues: {
       searchByTitle: "",
@@ -75,7 +77,7 @@ export const ShowTasks: React.FC = () => {
       <FilterTask register={register} />
       <div className="show-task">
         {filteredTasks.length === 0 && (
-          <div className="header-wrapper">
+          <div className={darkMode ? "header-wrapper" : "header-wrapper-light"}>
             <h3>No Tasks yet!</h3>
           </div>
         )}

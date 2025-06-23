@@ -31,6 +31,13 @@
   justify-content: center;
 }
 
+.header-wrapper-light {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  color: black;
+}
+
 .Done {
   background-color: rgb(72, 139, 72);
 }

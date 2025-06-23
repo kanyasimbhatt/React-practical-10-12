@@ -75,7 +75,11 @@ export const ShowTasks: React.FC = () => {
       <FilterTask register={register} />
       <div className="show-task">
         {filteredTasks.length === 0 && (
-          <div className="header-wrapper">
+          <div
+            className={
+              generalData.darkMode ? "header-wrapper" : "header-wrapper-light"
+            }
+          >
             <h3>No Tasks yet!</h3>
           </div>
         )}

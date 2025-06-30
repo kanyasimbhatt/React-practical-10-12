@@ -2,15 +2,13 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./showTasks.css";
 import { useForm } from "react-hook-form";
-import { useTask } from "../TaskProvider";
-import { useDarkMode } from "../Navbar/DarkModeProvider";
+import { useGeneral } from "../GeneralProvider";
 import { FilterTask } from "../FilterTasks/FilterTask";
 import { Task, FilterElement, TodoStatus } from "../../Types/Tasks/types";
 
 export const ShowTasks: React.FC = () => {
   const statusOptions = ["Done", "In Progress", "Todo"];
-  const { tasks, setTasks } = useTask();
-  const { darkMode } = useDarkMode();
+  const { generalData, dispatch } = useGeneral();
   const { register, watch } = useForm<FilterElement>({
     defaultValues: {
       searchByTitle: "",
@@ -22,7 +20,7 @@ export const ShowTasks: React.FC = () => {
   const filterContent = watch();
   const navigate = useNavigate();
 
-  const filteredTasks = tasks.filter((t: Task) => {
+  const filteredTasks = generalData.tasks.filter((t: Task) => {
     const searchedTitle = filterContent.searchByTitle
       ? searchTheGiven(t.title, filterContent.searchByTitle)
       : true;
@@ -54,30 +52,34 @@ export const ShowTasks: React.FC = () => {
   };
 
   const handleTaskDelete = (id: string) => {
-    const newFilteredArray = tasks.filter((t: Task) => t.id !== id);
-    setTasks(newFilteredArray);
+    const newFilteredArray = generalData.tasks.filter((t: Task) => t.id !== id);
+    dispatch({ type: "MODIFY_TASKS", payload: newFilteredArray });
   };
 
   const handleChangeOnStatus = (event: React.ChangeEvent, id: string) => {
-    const newTasksArray = tasks.map((t: Task) => {
+    const newTasksArray = generalData.tasks.map((t: Task) => {
       if (t.id === id && "value" in event.target) {
         t.status = event.target.value as TodoStatus;
       }
       return t;
     });
-    setTasks(newTasksArray);
+    dispatch({ type: "MODIFY_TASKS", payload: newTasksArray });
   };
 
   useEffect(() => {
-    localStorage.setItem("tasks-array", JSON.stringify(tasks));
-  }, [tasks]);
+    localStorage.setItem("tasks-array", JSON.stringify(generalData.tasks));
+  }, [generalData.tasks]);
 
   return (
     <>
       <FilterTask register={register} />
       <div className="show-task">
         {filteredTasks.length === 0 && (
-          <div className={darkMode ? "header-wrapper" : "header-wrapper-light"}>
+          <div
+            className={
+              generalData.darkMode ? "header-wrapper" : "header-wrapper-light"
+            }
+          >
             <h3>No Tasks yet!</h3>
           </div>
         )}

@@ -1,10 +1,10 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { DarkModeProvider } from "./Components/Tasks/Navbar/DarkModeProvider.tsx";
+import GeneralProvider from "./Components/Tasks/GeneralProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <DarkModeProvider>
+  <GeneralProvider>
     <App />
-  </DarkModeProvider>,
+  </GeneralProvider>,
 );

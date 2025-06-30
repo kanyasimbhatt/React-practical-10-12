@@ -1,31 +1,35 @@
 import { UseFormRegister } from "react-hook-form";
 import "./FilterTask.css";
 import { FilterElement } from "../../Types/Tasks/types";
-import { useDarkMode } from "../Navbar/DarkModeProvider";
+import { useGeneral } from "../GeneralProvider";
 
 type RegisterType = {
   register: UseFormRegister<FilterElement>;
 };
 
 export const FilterTask: React.FC<RegisterType> = ({ register }) => {
-  const { darkMode } = useDarkMode();
+  const { generalData } = useGeneral();
   return (
-    <div className={darkMode ? "filter-section" : "filter-section-light"}>
+    <div
+      className={
+        generalData.darkMode ? "filter-section" : "filter-section-light"
+      }
+    >
       <input
         type="text"
         {...register("searchByTitle")}
-        className={darkMode ? "input" : "input-light-filter"}
+        className={generalData.darkMode ? "input" : "input-light-filter"}
         placeholder="Search By Title"
       />
       <input
         type="text"
         {...register("searchByDescription")}
-        className={darkMode ? "input" : "input-light-filter"}
+        className={generalData.darkMode ? "input" : "input-light-filter"}
         placeholder="Search By Description"
       />
       <input
         type="text"
-        className={darkMode ? "input" : "input-light-filter"}
+        className={generalData.darkMode ? "input" : "input-light-filter"}
         {...register("searchByBoth")}
         placeholder="Search By Title and Description"
       />
@@ -33,7 +37,7 @@ export const FilterTask: React.FC<RegisterType> = ({ register }) => {
         Filter By Status:
         <select
           {...register("filterStatus")}
-          className={darkMode ? "input" : "input-light-filter"}
+          className={generalData.darkMode ? "input" : "input-light-filter"}
         >
           <option value={""}>All Task</option>
           <option value={`Todo`}>Todo</option>
